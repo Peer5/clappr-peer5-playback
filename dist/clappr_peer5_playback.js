@@ -88,9 +88,7 @@ var ClapprPeer5Playback = (function (_HLS) {
 
             // error handlers
             this.playlistXhr.onerror = this.playlistXhr.onabort = function (e) {
-                setTimeout(function () {
-                    _this.requestPlaylist(url);
-                }, 100);
+                return _this.el[callbackFailure]();
             };
 
             this.playlistXhr.send();
