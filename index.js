@@ -12,6 +12,10 @@ class ClapprPeer5Playback extends HLS {
 
         this.playlistXhr = null;
         this.fragmentXhr = null;
+
+        // configs
+        this.firstPlayStartPosition = peer5.getConfig('MEDIA_LIVE_START_POS') || 0;
+        this.maxBufferLength = peer5.getConfig('MEDIA_MAXBUFFER') || 30;
     }
 
     addListeners() {
@@ -27,10 +31,11 @@ class ClapprPeer5Playback extends HLS {
     stopListening() {
         super.stopListening();
 
-        Clappr.Mediator.off(this.cid + ":requestplaylist");
-        Clappr.Mediator.off(this.cid + ":abortplaylist");
-        Clappr.Mediator.off(this.cid + ":requestfragment");
-        Clappr.Mediator.off(this.cid + ":abortfragment");
+        Clappr.Mediator.off(this.cid + ":error");
+        Clappr.Mediator.off(this.cid + ":playlistrequest");
+        Clappr.Mediator.off(this.cid + ":playlistabort");
+        Clappr.Mediator.off(this.cid + ":fragmentrequest");
+        Clappr.Mediator.off(this.cid + ":fragmentabort");
     }
 
     onError(code, url, message) {
@@ -114,10 +119,18 @@ class ClapprPeer5Playback extends HLS {
 
         // enable support for flashls JS Loader
         this.el.playerSetJSURLStream(true);
+        this.el.playerSetmaxBufferLength(this.maxBufferLength);
+    }
+
+    firstPlay() {
+        this.setFlashSettings(); //ensure flushLiveURLCache will work (#327)
+        this.el.playerLoad(this.src);
+        Clappr.Mediator.once(this.cid + ":manifestloaded", () => this.el.playerPlay(this.firstPlayStartPosition));
+        this.srcLoaded = true;
     }
 }
 
-ClapprPeer5Playback.canPlay = function(resource) {
+ClapprPeer5Playback.canPlay = function(resource, mimeType) {
     return (typeof peer5 !== 'undefined') && !!(window.webkitRTCPeerConnection || window.mozRTCPeerConnection) && Browser.hasFlash && window.btoa && (!!resource.match(/^http(.*).m3u8?/) || mimeType === "application/x-mpegURL");
 };
 

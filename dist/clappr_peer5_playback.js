@@ -21,6 +21,10 @@ var ClapprPeer5Playback = (function (_HLS) {
 
         this.playlistXhr = null;
         this.fragmentXhr = null;
+
+        // configs
+        this.firstPlayStartPosition = peer5.getConfig('MEDIA_LIVE_START_POS') || 0;
+        this.maxBufferLength = peer5.getConfig('MEDIA_MAXBUFFER') || 30;
     }
 
     _inherits(ClapprPeer5Playback, _HLS);
@@ -58,10 +62,11 @@ var ClapprPeer5Playback = (function (_HLS) {
         value: function stopListening() {
             _get(Object.getPrototypeOf(ClapprPeer5Playback.prototype), 'stopListening', this).call(this);
 
-            Clappr.Mediator.off(this.cid + ':requestplaylist');
-            Clappr.Mediator.off(this.cid + ':abortplaylist');
-            Clappr.Mediator.off(this.cid + ':requestfragment');
-            Clappr.Mediator.off(this.cid + ':abortfragment');
+            Clappr.Mediator.off(this.cid + ':error');
+            Clappr.Mediator.off(this.cid + ':playlistrequest');
+            Clappr.Mediator.off(this.cid + ':playlistabort');
+            Clappr.Mediator.off(this.cid + ':fragmentrequest');
+            Clappr.Mediator.off(this.cid + ':fragmentabort');
         }
     }, {
         key: 'onError',
@@ -152,13 +157,26 @@ var ClapprPeer5Playback = (function (_HLS) {
 
             // enable support for flashls JS Loader
             this.el.playerSetJSURLStream(true);
+            this.el.playerSetmaxBufferLength(this.maxBufferLength);
+        }
+    }, {
+        key: 'firstPlay',
+        value: function firstPlay() {
+            var _this3 = this;
+
+            this.setFlashSettings(); //ensure flushLiveURLCache will work (#327)
+            this.el.playerLoad(this.src);
+            Clappr.Mediator.once(this.cid + ':manifestloaded', function () {
+                return _this3.el.playerPlay(_this3.firstPlayStartPosition);
+            });
+            this.srcLoaded = true;
         }
     }]);
 
     return ClapprPeer5Playback;
 })(HLS);
 
-ClapprPeer5Playback.canPlay = function (resource) {
+ClapprPeer5Playback.canPlay = function (resource, mimeType) {
     return typeof peer5 !== 'undefined' && !!(window.webkitRTCPeerConnection || window.mozRTCPeerConnection) && Browser.hasFlash && window.btoa && (!!resource.match(/^http(.*).m3u8?/) || mimeType === 'application/x-mpegURL');
 };
 
