@@ -2,7 +2,7 @@ var HLS = require('hls');
 var Browser = require('browser');
 var JST = require('./jst');
 
-class ClapprPeer5Playback extends HLS {
+class Peer5Playback extends HLS {
     get name() {
         return 'hls';
     }
@@ -130,9 +130,9 @@ class ClapprPeer5Playback extends HLS {
     }
 }
 
-ClapprPeer5Playback.canPlay = function(resource, mimeType) {
+Peer5Playback.canPlay = function(resource, mimeType) {
     return (typeof peer5 !== 'undefined') && !!(window.webkitRTCPeerConnection || window.mozRTCPeerConnection) && Browser.hasFlash && window.btoa && (!!resource.match(/^http(.*).m3u8?/) || mimeType === "application/x-mpegURL");
 };
 
 
-module.exports = window.ClapprPeer5Playback = ClapprPeer5Playback;
+module.exports = window.Peer5Playback = Peer5Playback;
