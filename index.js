@@ -21,11 +21,11 @@ class ClapprPeer5Playback extends HLS {
     addListeners() {
         super.addListeners();
 
-        Clappr.Mediator.on(this.cid + ":error", (data) => this.onError(data.code, data.url, data.message));
-        Clappr.Mediator.on(this.cid + ":playlistrequest", (data) => this.onPlaylistRequest(data.objectId, data.url, data.callbackLoaded, data.callbackFailure));
-        Clappr.Mediator.on(this.cid + ":playlistabort", (objectId) => this.onPlaylistAbort(objectId));
-        Clappr.Mediator.on(this.cid + ":fragmentrequest", (data) => this.onFragmentRequest(data.objectId, data.url, data.callbackLoaded, data.callbackFailure));
-        Clappr.Mediator.on(this.cid + ":fragmentabort", (objectId) => this.onFragmentAbort(objectId));
+        Clappr.Mediator.on(this.cid + ":error", (code, url, message) => this.onError(code, url, message));
+        Clappr.Mediator.on(this.cid + ":playlistrequest", (instanceId, url, callbackLoaded, callbackFailure) => this.onPlaylistRequest(instanceId, url, callbackLoaded, callbackFailure));
+        Clappr.Mediator.on(this.cid + ":playlistabort", (instanceId) => this.onPlaylistAbort(instanceId));
+        Clappr.Mediator.on(this.cid + ":fragmentrequest", (instanceId, url, callbackLoaded, callbackFailure) => this.onFragmentRequest(instanceId, url, callbackLoaded, callbackFailure));
+        Clappr.Mediator.on(this.cid + ":fragmentabort", (instanceId) => this.onFragmentAbort(instanceId));
     }
 
     stopListening() {
@@ -42,7 +42,7 @@ class ClapprPeer5Playback extends HLS {
         console.error('flashls error:', code, url, message);
     }
 
-    onPlaylistRequest(objectId, url, callbackLoaded, callbackFailure) {
+    onPlaylistRequest(instanceId, url, callbackLoaded, callbackFailure) {
         var _this = this;
 
         // prepare request
@@ -66,13 +66,13 @@ class ClapprPeer5Playback extends HLS {
         this.playlistXhr.send();
     }
 
-    onPlaylistAbort(objectId) {
+    onPlaylistAbort(instanceId) {
         if (this.playlistXhr) {
             this.playlistXhr.abort();
         }
     }
 
-    onFragmentRequest(objectId, url, callbackLoaded, callbackFailure) {
+    onFragmentRequest(instanceId, url, callbackLoaded, callbackFailure) {
         var _this = this;
 
         // prepare request
@@ -99,6 +99,12 @@ class ClapprPeer5Playback extends HLS {
         this.fragmentXhr.send();
     }
 
+    onFragmentAbort(instanceId) {
+        if (this.fragmentXhr) {
+            this.fragmentXhr.abort();
+        }
+    }
+
     arrayBufferToBase64(arrayBuffer) {
         var bytes = new Uint8Array(arrayBuffer);
         var binary = '';
@@ -106,12 +112,6 @@ class ClapprPeer5Playback extends HLS {
             binary += String.fromCharCode(bytes[i]);
         }
         return window.btoa(binary);
-    }
-
-    onFragmentAbort(objectId) {
-        if (this.fragmentXhr) {
-            this.fragmentXhr.abort();
-        }
     }
 
     setFlashSettings() {

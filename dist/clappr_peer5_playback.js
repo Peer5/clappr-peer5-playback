@@ -41,20 +41,20 @@ var ClapprPeer5Playback = (function (_HLS) {
 
             _get(Object.getPrototypeOf(ClapprPeer5Playback.prototype), 'addListeners', this).call(this);
 
-            Clappr.Mediator.on(this.cid + ':error', function (data) {
-                return _this2.onError(data.code, data.url, data.message);
+            Clappr.Mediator.on(this.cid + ':error', function (code, url, message) {
+                return _this2.onError(code, url, message);
             });
-            Clappr.Mediator.on(this.cid + ':playlistrequest', function (data) {
-                return _this2.onPlaylistRequest(data.objectId, data.url, data.callbackLoaded, data.callbackFailure);
+            Clappr.Mediator.on(this.cid + ':playlistrequest', function (instanceId, url, callbackLoaded, callbackFailure) {
+                return _this2.onPlaylistRequest(instanceId, url, callbackLoaded, callbackFailure);
             });
-            Clappr.Mediator.on(this.cid + ':playlistabort', function (objectId) {
-                return _this2.onPlaylistAbort(objectId);
+            Clappr.Mediator.on(this.cid + ':playlistabort', function (instanceId) {
+                return _this2.onPlaylistAbort(instanceId);
             });
-            Clappr.Mediator.on(this.cid + ':fragmentrequest', function (data) {
-                return _this2.onFragmentRequest(data.objectId, data.url, data.callbackLoaded, data.callbackFailure);
+            Clappr.Mediator.on(this.cid + ':fragmentrequest', function (instanceId, url, callbackLoaded, callbackFailure) {
+                return _this2.onFragmentRequest(instanceId, url, callbackLoaded, callbackFailure);
             });
-            Clappr.Mediator.on(this.cid + ':fragmentabort', function (objectId) {
-                return _this2.onFragmentAbort(objectId);
+            Clappr.Mediator.on(this.cid + ':fragmentabort', function (instanceId) {
+                return _this2.onFragmentAbort(instanceId);
             });
         }
     }, {
@@ -75,7 +75,7 @@ var ClapprPeer5Playback = (function (_HLS) {
         }
     }, {
         key: 'onPlaylistRequest',
-        value: function onPlaylistRequest(objectId, url, callbackLoaded, callbackFailure) {
+        value: function onPlaylistRequest(instanceId, url, callbackLoaded, callbackFailure) {
             var _this = this;
 
             // prepare request
@@ -100,14 +100,14 @@ var ClapprPeer5Playback = (function (_HLS) {
         }
     }, {
         key: 'onPlaylistAbort',
-        value: function onPlaylistAbort(objectId) {
+        value: function onPlaylistAbort(instanceId) {
             if (this.playlistXhr) {
                 this.playlistXhr.abort();
             }
         }
     }, {
         key: 'onFragmentRequest',
-        value: function onFragmentRequest(objectId, url, callbackLoaded, callbackFailure) {
+        value: function onFragmentRequest(instanceId, url, callbackLoaded, callbackFailure) {
             var _this = this;
 
             // prepare request
@@ -134,6 +134,13 @@ var ClapprPeer5Playback = (function (_HLS) {
             this.fragmentXhr.send();
         }
     }, {
+        key: 'onFragmentAbort',
+        value: function onFragmentAbort(instanceId) {
+            if (this.fragmentXhr) {
+                this.fragmentXhr.abort();
+            }
+        }
+    }, {
         key: 'arrayBufferToBase64',
         value: function arrayBufferToBase64(arrayBuffer) {
             var bytes = new Uint8Array(arrayBuffer);
@@ -142,13 +149,6 @@ var ClapprPeer5Playback = (function (_HLS) {
                 binary += String.fromCharCode(bytes[i]);
             }
             return window.btoa(binary);
-        }
-    }, {
-        key: 'onFragmentAbort',
-        value: function onFragmentAbort(objectId) {
-            if (this.fragmentXhr) {
-                this.fragmentXhr.abort();
-            }
         }
     }, {
         key: 'setFlashSettings',
