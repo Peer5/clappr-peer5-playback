@@ -44,16 +44,16 @@ var ClapprPeer5Playback = (function (_HLS) {
             Clappr.Mediator.on(this.cid + ':error', function (code, url, message) {
                 return _this2.onError(code, url, message);
             });
-            Clappr.Mediator.on(this.cid + ':playlistrequest', function (instanceId, url, callbackLoaded, callbackFailure) {
+            Clappr.Mediator.on(this.cid + ':requestplaylist', function (instanceId, url, callbackLoaded, callbackFailure) {
                 return _this2.onPlaylistRequest(instanceId, url, callbackLoaded, callbackFailure);
             });
-            Clappr.Mediator.on(this.cid + ':playlistabort', function (instanceId) {
+            Clappr.Mediator.on(this.cid + ':abortplaylist', function (instanceId) {
                 return _this2.onPlaylistAbort(instanceId);
             });
-            Clappr.Mediator.on(this.cid + ':fragmentrequest', function (instanceId, url, callbackLoaded, callbackFailure) {
+            Clappr.Mediator.on(this.cid + ':requestfragment', function (instanceId, url, callbackLoaded, callbackFailure) {
                 return _this2.onFragmentRequest(instanceId, url, callbackLoaded, callbackFailure);
             });
-            Clappr.Mediator.on(this.cid + ':fragmentabort', function (instanceId) {
+            Clappr.Mediator.on(this.cid + ':abortfragment', function (instanceId) {
                 return _this2.onFragmentAbort(instanceId);
             });
         }
@@ -63,10 +63,10 @@ var ClapprPeer5Playback = (function (_HLS) {
             _get(Object.getPrototypeOf(ClapprPeer5Playback.prototype), 'stopListening', this).call(this);
 
             Clappr.Mediator.off(this.cid + ':error');
-            Clappr.Mediator.off(this.cid + ':playlistrequest');
-            Clappr.Mediator.off(this.cid + ':playlistabort');
-            Clappr.Mediator.off(this.cid + ':fragmentrequest');
-            Clappr.Mediator.off(this.cid + ':fragmentabort');
+            Clappr.Mediator.off(this.cid + ':requestplaylist');
+            Clappr.Mediator.off(this.cid + ':abortplaylist');
+            Clappr.Mediator.off(this.cid + ':requestfragment');
+            Clappr.Mediator.off(this.cid + ':abortfragment');
         }
     }, {
         key: 'onError',

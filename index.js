@@ -22,20 +22,20 @@ class ClapprPeer5Playback extends HLS {
         super.addListeners();
 
         Clappr.Mediator.on(this.cid + ":error", (code, url, message) => this.onError(code, url, message));
-        Clappr.Mediator.on(this.cid + ":playlistrequest", (instanceId, url, callbackLoaded, callbackFailure) => this.onPlaylistRequest(instanceId, url, callbackLoaded, callbackFailure));
-        Clappr.Mediator.on(this.cid + ":playlistabort", (instanceId) => this.onPlaylistAbort(instanceId));
-        Clappr.Mediator.on(this.cid + ":fragmentrequest", (instanceId, url, callbackLoaded, callbackFailure) => this.onFragmentRequest(instanceId, url, callbackLoaded, callbackFailure));
-        Clappr.Mediator.on(this.cid + ":fragmentabort", (instanceId) => this.onFragmentAbort(instanceId));
+        Clappr.Mediator.on(this.cid + ":requestplaylist", (instanceId, url, callbackLoaded, callbackFailure) => this.onPlaylistRequest(instanceId, url, callbackLoaded, callbackFailure));
+        Clappr.Mediator.on(this.cid + ":abortplaylist", (instanceId) => this.onPlaylistAbort(instanceId));
+        Clappr.Mediator.on(this.cid + ":requestfragment", (instanceId, url, callbackLoaded, callbackFailure) => this.onFragmentRequest(instanceId, url, callbackLoaded, callbackFailure));
+        Clappr.Mediator.on(this.cid + ":abortfragment", (instanceId) => this.onFragmentAbort(instanceId));
     }
 
     stopListening() {
         super.stopListening();
 
         Clappr.Mediator.off(this.cid + ":error");
-        Clappr.Mediator.off(this.cid + ":playlistrequest");
-        Clappr.Mediator.off(this.cid + ":playlistabort");
-        Clappr.Mediator.off(this.cid + ":fragmentrequest");
-        Clappr.Mediator.off(this.cid + ":fragmentabort");
+        Clappr.Mediator.off(this.cid + ":requestplaylist");
+        Clappr.Mediator.off(this.cid + ":abortplaylist");
+        Clappr.Mediator.off(this.cid + ":requestfragment");
+        Clappr.Mediator.off(this.cid + ":abortfragment");
     }
 
     onError(code, url, message) {
