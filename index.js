@@ -55,11 +55,13 @@ class Peer5Playback extends HLS {
                 return _this.el[callbackFailure]();
             }
 
+            _this.playlistXhr = null;
             return _this.el[callbackLoaded](e.currentTarget.response);
         };
 
         // error handlers
         this.playlistXhr.onerror = this.playlistXhr.onabort = function(e) {
+            _this.playlistXhr = null;
             return _this.el[callbackFailure]();
         };
 
@@ -88,12 +90,14 @@ class Peer5Playback extends HLS {
             var b64 = _this.arrayBufferToBase64(e.currentTarget.response);
             var len = e.currentTarget.response.byteLength;
 
+            _this.fragmentXhr = null;
             return _this.el[callbackLoaded](b64, len);
         };
 
         // error handlers
         this.fragmentXhr.onerror = this.fragmentXhr.onabort = function(e) {
-            _this.el[callbackFailure]();
+            _this.fragmentXhr = null;
+            return _this.el[callbackFailure]();
         };
 
         this.fragmentXhr.send();
