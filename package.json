@@ -1,6 +1,6 @@
 {
   "name": "clappr_peer5_playback",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dependencies": {
     "clappr": "latest"
   },
