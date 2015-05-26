@@ -52,6 +52,7 @@ class Peer5Playback extends HLS {
 
         this.playlistXhr.onload = function(e) {
             if (!e.currentTarget.response) {
+                _this.playlistXhr = null;
                 return _this.el[callbackFailure]();
             }
 
@@ -84,6 +85,7 @@ class Peer5Playback extends HLS {
 
         this.fragmentXhr.onload = function(e) {
             if (!e.currentTarget.response) {
+                _this.fragmentXhr = null;
                 return _this.el[callbackFailure]();
             }
 

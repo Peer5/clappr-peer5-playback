@@ -85,6 +85,7 @@ var Peer5Playback = (function (_HLS) {
 
             this.playlistXhr.onload = function (e) {
                 if (!e.currentTarget.response) {
+                    _this.playlistXhr = null;
                     return _this.el[callbackFailure]();
                 }
 
@@ -119,6 +120,7 @@ var Peer5Playback = (function (_HLS) {
 
             this.fragmentXhr.onload = function (e) {
                 if (!e.currentTarget.response) {
+                    _this.fragmentXhr = null;
                     return _this.el[callbackFailure]();
                 }
 
