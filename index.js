@@ -53,17 +53,17 @@ class Peer5Playback extends HLS {
         this.playlistXhr.onload = function(e) {
             if (!e.currentTarget.response) {
                 _this.playlistXhr = null;
-                return _this.el[callbackFailure]();
+                return _this.el[callbackFailure] && _this.el[callbackFailure]();
             }
 
             _this.playlistXhr = null;
-            return _this.el[callbackLoaded](e.currentTarget.response);
+            return _this.el[callbackLoaded] && _this.el[callbackLoaded](e.currentTarget.response);
         };
 
         // error handlers
         this.playlistXhr.onerror = this.playlistXhr.onabort = function(e) {
             _this.playlistXhr = null;
-            return _this.el[callbackFailure]();
+            return _this.el[callbackFailure] && _this.el[callbackFailure]();
         };
 
         this.playlistXhr.send();
@@ -71,6 +71,7 @@ class Peer5Playback extends HLS {
 
     onPlaylistAbort(instanceId) {
         if (this.playlistXhr) {
+            this.playlistXhr.onabort = null;
             this.playlistXhr.abort();
         }
     }
@@ -86,20 +87,20 @@ class Peer5Playback extends HLS {
         this.fragmentXhr.onload = function(e) {
             if (!e.currentTarget.response) {
                 _this.fragmentXhr = null;
-                return _this.el[callbackFailure]();
+                return _this.el[callbackFailure] && _this.el[callbackFailure]();
             }
 
             var b64 = _this.arrayBufferToBase64(e.currentTarget.response);
             var len = e.currentTarget.response.byteLength;
 
             _this.fragmentXhr = null;
-            return _this.el[callbackLoaded](b64, len);
+            return _this.el[callbackLoaded] && _this.el[callbackLoaded](b64, len);
         };
 
         // error handlers
         this.fragmentXhr.onerror = this.fragmentXhr.onabort = function(e) {
             _this.fragmentXhr = null;
-            return _this.el[callbackFailure]();
+            return _this.el[callbackFailure] && _this.el[callbackFailure]();
         };
 
         this.fragmentXhr.send();
@@ -107,6 +108,7 @@ class Peer5Playback extends HLS {
 
     onFragmentAbort(instanceId) {
         if (this.fragmentXhr) {
+            this.fragmentXhr.onabort = null;
             this.fragmentXhr.abort();
         }
     }
