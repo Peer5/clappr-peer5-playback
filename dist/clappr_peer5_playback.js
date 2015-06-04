@@ -25,6 +25,7 @@ var Peer5Playback = (function (_HLS) {
         // configs
         this.firstPlayStartPosition = peer5.getConfig('MEDIA_LIVE_START_POS') || 0;
         this.maxBufferLength = peer5.getConfig('MEDIA_MAXBUFFER') || 30;
+        this.native = peer5.getConfig('CLAPPR_NATIVE_FALLBACK') || false;
     }
 
     _inherits(Peer5Playback, _HLS);
@@ -79,7 +80,7 @@ var Peer5Playback = (function (_HLS) {
             var _this = this;
 
             // prepare request
-            this.playlistXhr = new peer5.Request();
+            this.playlistXhr = this.native ? new XMLHttpRequest() : new peer5.Request();
             this.playlistXhr.open('GET', url);
             this.playlistXhr.responseType = 'text';
 
@@ -107,6 +108,7 @@ var Peer5Playback = (function (_HLS) {
             if (this.playlistXhr) {
                 this.playlistXhr.onabort = null;
                 this.playlistXhr.abort();
+                this.playlistXhr = null;
             }
         }
     }, {
@@ -115,7 +117,7 @@ var Peer5Playback = (function (_HLS) {
             var _this = this;
 
             // prepare request
-            this.fragmentXhr = new peer5.Request();
+            this.fragmentXhr = this.native ? new XMLHttpRequest() : new peer5.Request();
             this.fragmentXhr.open('GET', url);
             this.fragmentXhr.responseType = 'arraybuffer';
 
@@ -146,6 +148,7 @@ var Peer5Playback = (function (_HLS) {
             if (this.fragmentXhr) {
                 this.fragmentXhr.onabort = null;
                 this.fragmentXhr.abort();
+                this.fragmentXhr = null;
             }
         }
     }, {
