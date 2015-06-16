@@ -19,9 +19,6 @@ var Peer5Playback = (function (_HLS) {
 
         _get(Object.getPrototypeOf(Peer5Playback.prototype), 'constructor', this).call(this, options);
 
-        this.playlistXhr = null;
-        this.fragmentXhr = null;
-
         // configs
         this.firstPlayStartPosition = peer5.getConfig('MEDIA_LIVE_START_POS') || 0;
         this.maxBufferLength = peer5.getConfig('MEDIA_MAXBUFFER') || 30;
@@ -38,24 +35,22 @@ var Peer5Playback = (function (_HLS) {
     }, {
         key: 'addListeners',
         value: function addListeners() {
-            var _this2 = this;
-
             _get(Object.getPrototypeOf(Peer5Playback.prototype), 'addListeners', this).call(this);
 
             Clappr.Mediator.on(this.cid + ':error', function (code, url, message) {
-                return _this2.onError(code, url, message);
+                return peer5.flashls.trigger('error', [code, url, message]);
             });
             Clappr.Mediator.on(this.cid + ':requestplaylist', function (instanceId, url, callbackLoaded, callbackFailure) {
-                return _this2.onPlaylistRequest(instanceId, url, callbackLoaded, callbackFailure);
+                return peer5.flashls.trigger('requestPlaylist', [instanceId, url, callbackLoaded, callbackFailure]);
             });
             Clappr.Mediator.on(this.cid + ':abortplaylist', function (instanceId) {
-                return _this2.onPlaylistAbort(instanceId);
+                return peer5.flashls.trigger('abortPlaylist', [instanceId]);
             });
             Clappr.Mediator.on(this.cid + ':requestfragment', function (instanceId, url, callbackLoaded, callbackFailure) {
-                return _this2.onFragmentRequest(instanceId, url, callbackLoaded, callbackFailure);
+                return peer5.flashls.trigger('requestFragment'[(instanceId, url, callbackLoaded, callbackFailure)]);
             });
             Clappr.Mediator.on(this.cid + ':abortfragment', function (instanceId) {
-                return _this2.onFragmentAbort(instanceId);
+                return peer5.flashls.trigger('abortFragment', [instanceId]);
             });
         }
     }, {
@@ -70,98 +65,6 @@ var Peer5Playback = (function (_HLS) {
             Clappr.Mediator.off(this.cid + ':abortfragment');
         }
     }, {
-        key: 'onError',
-        value: function onError(code, url, message) {
-            console.error('flashls error:', code, url, message);
-        }
-    }, {
-        key: 'onPlaylistRequest',
-        value: function onPlaylistRequest(instanceId, url, callbackLoaded, callbackFailure) {
-            var _this = this;
-
-            // prepare request
-            this.playlistXhr = this.native ? new XMLHttpRequest() : new peer5.Request();
-            this.playlistXhr.open('GET', url);
-            this.playlistXhr.responseType = 'text';
-
-            this.playlistXhr.onload = function (e) {
-                if (!e.currentTarget.response) {
-                    _this.playlistXhr = null;
-                    return _this.el[callbackFailure] && _this.el[callbackFailure]();
-                }
-
-                _this.playlistXhr = null;
-                return _this.el[callbackLoaded] && _this.el[callbackLoaded](e.currentTarget.response);
-            };
-
-            // error handlers
-            this.playlistXhr.onerror = this.playlistXhr.onabort = function (e) {
-                _this.playlistXhr = null;
-                return _this.el[callbackFailure] && _this.el[callbackFailure]();
-            };
-
-            this.playlistXhr.send();
-        }
-    }, {
-        key: 'onPlaylistAbort',
-        value: function onPlaylistAbort(instanceId) {
-            if (this.playlistXhr) {
-                this.playlistXhr.onabort = null;
-                this.playlistXhr.abort();
-                this.playlistXhr = null;
-            }
-        }
-    }, {
-        key: 'onFragmentRequest',
-        value: function onFragmentRequest(instanceId, url, callbackLoaded, callbackFailure) {
-            var _this = this;
-
-            // prepare request
-            this.fragmentXhr = this.native ? new XMLHttpRequest() : new peer5.Request();
-            this.fragmentXhr.open('GET', url);
-            this.fragmentXhr.responseType = 'arraybuffer';
-
-            this.fragmentXhr.onload = function (e) {
-                if (!e.currentTarget.response) {
-                    _this.fragmentXhr = null;
-                    return _this.el[callbackFailure] && _this.el[callbackFailure]();
-                }
-
-                var b64 = _this.arrayBufferToBase64(e.currentTarget.response);
-                var len = e.currentTarget.response.byteLength;
-
-                _this.fragmentXhr = null;
-                return _this.el[callbackLoaded] && _this.el[callbackLoaded](b64, len);
-            };
-
-            // error handlers
-            this.fragmentXhr.onerror = this.fragmentXhr.onabort = function (e) {
-                _this.fragmentXhr = null;
-                return _this.el[callbackFailure] && _this.el[callbackFailure]();
-            };
-
-            this.fragmentXhr.send();
-        }
-    }, {
-        key: 'onFragmentAbort',
-        value: function onFragmentAbort(instanceId) {
-            if (this.fragmentXhr) {
-                this.fragmentXhr.onabort = null;
-                this.fragmentXhr.abort();
-                this.fragmentXhr = null;
-            }
-        }
-    }, {
-        key: 'arrayBufferToBase64',
-        value: function arrayBufferToBase64(arrayBuffer) {
-            var bytes = new Uint8Array(arrayBuffer);
-            var binary = '';
-            for (var i = 0, length = bytes.length; i < length; i++) {
-                binary += String.fromCharCode(bytes[i]);
-            }
-            return window.btoa(binary);
-        }
-    }, {
         key: 'setFlashSettings',
         value: function setFlashSettings() {
             _get(Object.getPrototypeOf(Peer5Playback.prototype), 'setFlashSettings', this).call(this);
@@ -173,12 +76,12 @@ var Peer5Playback = (function (_HLS) {
     }, {
         key: 'firstPlay',
         value: function firstPlay() {
-            var _this3 = this;
+            var _this = this;
 
             this.setFlashSettings(); //ensure flushLiveURLCache will work (#327)
             this.el.playerLoad(this.src);
             Clappr.Mediator.once(this.cid + ':manifestloaded', function () {
-                return _this3.el.playerPlay(_this3.firstPlayStartPosition);
+                return _this.el.playerPlay(_this.firstPlayStartPosition);
             });
             this.srcLoaded = true;
         }
