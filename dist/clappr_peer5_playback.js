@@ -47,7 +47,7 @@ var Peer5Playback = (function (_HLS) {
                 return peer5.flashls.trigger('abortPlaylist', [instanceId]);
             });
             Clappr.Mediator.on(this.cid + ':requestfragment', function (instanceId, url, callbackLoaded, callbackFailure) {
-                return peer5.flashls.trigger('requestFragment'[(instanceId, url, callbackLoaded, callbackFailure)]);
+                return peer5.flashls.trigger('requestFragment', [instanceId, url, callbackLoaded, callbackFailure]);
             });
             Clappr.Mediator.on(this.cid + ':abortfragment', function (instanceId) {
                 return peer5.flashls.trigger('abortFragment', [instanceId]);

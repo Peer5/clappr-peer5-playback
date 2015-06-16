@@ -22,7 +22,7 @@ class Peer5Playback extends HLS {
         Clappr.Mediator.on(this.cid + ":error", (code, url, message) => peer5.flashls.trigger('error', [code, url, message]));
         Clappr.Mediator.on(this.cid + ":requestplaylist", (instanceId, url, callbackLoaded, callbackFailure) => peer5.flashls.trigger('requestPlaylist', [instanceId, url, callbackLoaded, callbackFailure]));
         Clappr.Mediator.on(this.cid + ":abortplaylist", (instanceId) => peer5.flashls.trigger('abortPlaylist', [instanceId]));
-        Clappr.Mediator.on(this.cid + ":requestfragment", (instanceId, url, callbackLoaded, callbackFailure) => peer5.flashls.trigger('requestFragment' [instanceId, url, callbackLoaded, callbackFailure]));
+        Clappr.Mediator.on(this.cid + ":requestfragment", (instanceId, url, callbackLoaded, callbackFailure) => peer5.flashls.trigger('requestFragment', [instanceId, url, callbackLoaded, callbackFailure]));
         Clappr.Mediator.on(this.cid + ":abortfragment", (instanceId) => peer5.flashls.trigger('abortFragment', [instanceId]));
     }
 
