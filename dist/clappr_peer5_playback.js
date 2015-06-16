@@ -91,7 +91,7 @@ var Peer5Playback = (function (_HLS) {
 })(HLS);
 
 Peer5Playback.canPlay = function (resource, mimeType) {
-    return typeof peer5 !== 'undefined' && !!(window.webkitRTCPeerConnection || window.mozRTCPeerConnection) && Browser.hasFlash && window.btoa && (!!resource.match(/^http(.*).m3u8?/) || mimeType === 'application/x-mpegURL');
+    return typeof peer5 !== 'undefined' && !!(window.webkitRTCPeerConnection || window.mozRTCPeerConnection) && Browser.hasFlash && window.btoa && (!!resource.match(/^http(.*)\.m3u8?/) || mimeType === 'application/x-mpegURL');
 };
 
 module.exports = window.Peer5Playback = Peer5Playback;
