@@ -26,7 +26,7 @@ class Peer5Playback extends HLS {
         Clappr.Mediator.on(this.cid + ":abortplaylist", (instanceId) => peer5.flashls.trigger('abortPlaylist', [id]));
         Clappr.Mediator.on(this.cid + ":requestfragment", (instanceId, url, callbackLoaded, callbackFailure) => peer5.flashls.trigger('requestFragment', [id, url, callbackLoaded, callbackFailure]));
         Clappr.Mediator.on(this.cid + ":abortfragment", (instanceId) => peer5.flashls.trigger('abortFragment', [id]));
-        Clappr.Mediator.on(this.cid + ":fpsdrop", (realFps, droppedFps) => peer5.flashls.trigger('fpsdrop', [realFps, droppedFps]));
+        Clappr.Mediator.on(this.cid + ":fpsdrop", (realFps, droppedFps) => peer5.flashls.trigger('fpsDrop', [realFps, droppedFps]));
     }
 
     stopListening() {

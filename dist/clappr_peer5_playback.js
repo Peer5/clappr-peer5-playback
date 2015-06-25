@@ -55,7 +55,7 @@ var Peer5Playback = (function (_HLS) {
                 return peer5.flashls.trigger('abortFragment', [id]);
             });
             Clappr.Mediator.on(this.cid + ':fpsdrop', function (realFps, droppedFps) {
-                return peer5.flashls.trigger('fpsdrop', [realFps, droppedFps]);
+                return peer5.flashls.trigger('fpsDrop', [realFps, droppedFps]);
             });
         }
     }, {
