@@ -54,6 +54,9 @@ var Peer5Playback = (function (_HLS) {
             Clappr.Mediator.on(this.cid + ':abortfragment', function (instanceId) {
                 return peer5.flashls.trigger('abortFragment', [id]);
             });
+            Clappr.Mediator.on(this.cid + ':fpsdrop', function (realFps, droppedFps) {
+                return peer5.flashls.trigger('fpsdrop', [realFps, droppedFps]);
+            });
         }
     }, {
         key: 'stopListening',
@@ -65,6 +68,7 @@ var Peer5Playback = (function (_HLS) {
             Clappr.Mediator.off(this.cid + ':abortplaylist');
             Clappr.Mediator.off(this.cid + ':requestfragment');
             Clappr.Mediator.off(this.cid + ':abortfragment');
+            Clappr.Mediator.off(this.cid + ':fpsdrop');
         }
     }, {
         key: 'setFlashSettings',
