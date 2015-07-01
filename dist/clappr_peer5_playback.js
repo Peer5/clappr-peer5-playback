@@ -84,12 +84,14 @@ var Peer5Playback = (function (_HLS) {
         value: function firstPlay() {
             var _this = this;
 
-            this.setFlashSettings(); //ensure flushLiveURLCache will work (#327)
-            this.el.playerLoad(this.src);
-            Clappr.Mediator.once(this.cid + ':manifestloaded', function () {
-                return _this.el.playerPlay(_this.firstPlayStartPosition);
-            });
-            this.srcLoaded = true;
+            if (this.el && this.el.CallFunction) {
+                this.setFlashSettings(); //ensure flushLiveURLCache will work (#327)
+                this.el.playerLoad(this.src);
+                Clappr.Mediator.once(this.cid + ':manifestloaded', function () {
+                    return _this.el.playerPlay(_this.firstPlayStartPosition);
+                });
+                this.srcLoaded = true;
+            }
         }
     }]);
 

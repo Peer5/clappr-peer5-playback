@@ -49,10 +49,12 @@ class Peer5Playback extends HLS {
     }
 
     firstPlay() {
-        this.setFlashSettings(); //ensure flushLiveURLCache will work (#327)
-        this.el.playerLoad(this.src);
-        Clappr.Mediator.once(this.cid + ":manifestloaded", () => this.el.playerPlay(this.firstPlayStartPosition));
-        this.srcLoaded = true;
+        if (this.el && this.el.CallFunction) {
+            this.setFlashSettings(); //ensure flushLiveURLCache will work (#327)
+            this.el.playerLoad(this.src);
+            Clappr.Mediator.once(this.cid + ":manifestloaded", () => this.el.playerPlay(this.firstPlayStartPosition));
+            this.srcLoaded = true;
+        }
     }
 }
 
