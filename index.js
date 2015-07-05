@@ -12,6 +12,8 @@ class Peer5Playback extends HLS {
 
         // configs
         this.firstPlayStartPosition = peer5.getConfig('MEDIA_LIVE_START_POS') || 0;
+        this.lowBufferLength = peer5.getConfig('MEDIA_LOWBUFFER') || 3;
+        this.minBufferLength = peer5.getConfig('MEDIA_MINBUFFER') || -1;
         this.maxBufferLength = peer5.getConfig('MEDIA_MAXBUFFER') || 30;
         this.native = peer5.getConfig('CLAPPR_NATIVE_FALLBACK') || false;
     }
@@ -45,6 +47,8 @@ class Peer5Playback extends HLS {
 
         // enable support for flashls JS Loader
         this.el.playerSetJSURLStream(true);
+        this.el.playerSetlowBufferLength(this.lowBufferLength);
+        this.el.playerSetminBufferLength(this.minBufferLength);
         this.el.playerSetmaxBufferLength(this.maxBufferLength);
     }
 
@@ -54,6 +58,9 @@ class Peer5Playback extends HLS {
             this.el.playerLoad(this.src);
             Clappr.Mediator.once(this.cid + ":manifestloaded", () => this.el.playerPlay(this.firstPlayStartPosition));
             this.srcLoaded = true;
+            return true;
+        } else {
+            return false;
         }
     }
 }

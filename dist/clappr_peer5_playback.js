@@ -21,6 +21,8 @@ var Peer5Playback = (function (_HLS) {
 
         // configs
         this.firstPlayStartPosition = peer5.getConfig('MEDIA_LIVE_START_POS') || 0;
+        this.lowBufferLength = peer5.getConfig('MEDIA_LOWBUFFER') || 3;
+        this.minBufferLength = peer5.getConfig('MEDIA_MINBUFFER') || -1;
         this.maxBufferLength = peer5.getConfig('MEDIA_MAXBUFFER') || 30;
         this.native = peer5.getConfig('CLAPPR_NATIVE_FALLBACK') || false;
     }
@@ -77,6 +79,8 @@ var Peer5Playback = (function (_HLS) {
 
             // enable support for flashls JS Loader
             this.el.playerSetJSURLStream(true);
+            this.el.playerSetlowBufferLength(this.lowBufferLength);
+            this.el.playerSetminBufferLength(this.minBufferLength);
             this.el.playerSetmaxBufferLength(this.maxBufferLength);
         }
     }, {
@@ -91,6 +95,9 @@ var Peer5Playback = (function (_HLS) {
                     return _this.el.playerPlay(_this.firstPlayStartPosition);
                 });
                 this.srcLoaded = true;
+                return true;
+            } else {
+                return false;
             }
         }
     }]);
