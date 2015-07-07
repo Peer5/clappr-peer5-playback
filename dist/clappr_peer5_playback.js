@@ -95,9 +95,6 @@ var Peer5Playback = (function (_HLS) {
                     return _this.el.playerPlay(_this.firstPlayStartPosition);
                 });
                 this.srcLoaded = true;
-                return true;
-            } else {
-                return false;
             }
         }
     }]);

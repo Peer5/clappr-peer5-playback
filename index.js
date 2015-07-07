@@ -58,9 +58,6 @@ class Peer5Playback extends HLS {
             this.el.playerLoad(this.src);
             Clappr.Mediator.once(this.cid + ":manifestloaded", () => this.el.playerPlay(this.firstPlayStartPosition));
             this.srcLoaded = true;
-            return true;
-        } else {
-            return false;
         }
     }
 }
