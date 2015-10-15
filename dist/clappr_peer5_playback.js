@@ -44,20 +44,22 @@ var Peer5Playback = (function (_HLS) {
         value: function addListeners() {
             _get(Object.getPrototypeOf(Peer5Playback.prototype), 'addListeners', this).call(this);
 
+            var id = this.cid;
+
             Clappr.Mediator.on(this.cid + ':error', function (code, url, message) {
                 return peer5.flashls.trigger('error', [code, url, message]);
             });
             Clappr.Mediator.on(this.cid + ':requestplaylist', function (instanceId, url, callbackLoaded, callbackFailure) {
-                return peer5.flashls.trigger('requestPlaylist', [instanceId, url, callbackLoaded, callbackFailure]);
+                return peer5.flashls.trigger('requestPlaylist', [id, url, callbackLoaded, callbackFailure]);
             });
             Clappr.Mediator.on(this.cid + ':abortplaylist', function (instanceId) {
-                return peer5.flashls.trigger('abortPlaylist', [instanceId]);
+                return peer5.flashls.trigger('abortPlaylist', [id]);
             });
             Clappr.Mediator.on(this.cid + ':requestfragment', function (instanceId, url, callbackLoaded, callbackFailure) {
-                return peer5.flashls.trigger('requestFragment', [instanceId, url, callbackLoaded, callbackFailure]);
+                return peer5.flashls.trigger('requestFragment', [id, url, callbackLoaded, callbackFailure]);
             });
             Clappr.Mediator.on(this.cid + ':abortfragment', function (instanceId) {
-                return peer5.flashls.trigger('abortFragment', [instanceId]);
+                return peer5.flashls.trigger('abortFragment', [id]);
             });
             Clappr.Mediator.on(this.cid + ':fpsdrop', function (realFps, droppedFps) {
                 return peer5.flashls.trigger('fpsDrop', [realFps, droppedFps]);
