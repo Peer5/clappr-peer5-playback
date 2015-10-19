@@ -23,6 +23,7 @@ var Peer5Playback = (function (_HLS) {
         this.firstPlayStartPosition = window.peer5 ? peer5.getConfig('MEDIA_LIVE_START_POS') || 0 : 0;
         this.lowBufferLength = window.peer5 ? peer5.getConfig('MEDIA_LOWBUFFER') || 3 : 3;
         this.minBufferLength = window.peer5 ? peer5.getConfig('MEDIA_MINBUFFER') || -1 : -1;
+        this.minBufferLengthCapping = window.peer5 ? peer5.getConfig('MEDIA_MINBUFFERCAP') || -1 : -1;
         this.maxBufferLength = window.peer5 ? peer5.getConfig('MEDIA_MAXBUFFER') || 30 : 30;
         this.native = window.peer5 ? peer5.getConfig('CLAPPR_NATIVE_FALLBACK') || false : false;
 
@@ -86,6 +87,7 @@ var Peer5Playback = (function (_HLS) {
             this.el.playerSetJSURLStream(true);
             this.el.playerSetlowBufferLength(this.lowBufferLength);
             this.el.playerSetminBufferLength(this.minBufferLength);
+            this.el.playerSetminBufferLengthCapping(this.minBufferLengthCapping);
             this.el.playerSetmaxBufferLength(this.maxBufferLength);
         }
     }, {
